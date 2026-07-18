@@ -6,7 +6,7 @@ spring:
     name: ecommerce-backend
 
   datasource:
-    url: jdbc:h2:file:./data/ecommercedb;DB_CLOSE_ON_EXIT=FALSE;AUTO_SERVER=TRUE
+    url: jdbc:h2:file:./data/ecommercedb;DB_CLOSE_ON_EXIT=FALSE
     driver-class-name: org.h2.Driver
     username: sa
     password: ""

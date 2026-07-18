@@ -74,6 +74,8 @@ public class SecurityConfig {
                 .requestMatchers(HttpMethod.POST, "/api/products/**", "/api/categories/**").hasRole("ADMIN")
                 .requestMatchers(HttpMethod.PUT, "/api/products/**", "/api/categories/**").hasRole("ADMIN")
                 .requestMatchers(HttpMethod.DELETE, "/api/products/**", "/api/categories/**").hasRole("ADMIN")
+                // Admin-only order management (view/update any customer's orders)
+                .requestMatchers("/api/admin/**").hasRole("ADMIN")
                 // Everything else (cart, orders) requires authentication
                 .anyRequest().authenticated()
             )

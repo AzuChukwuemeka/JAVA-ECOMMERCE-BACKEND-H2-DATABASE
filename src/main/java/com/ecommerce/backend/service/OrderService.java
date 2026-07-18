@@ -92,6 +92,36 @@ public class OrderService {
         return toResponse(order);
     }
 
+    /** Admin: list every order in the system, optionally filtered by status. */
+    public PageResponse<OrderResponse> getAllOrders(OrderStatus status, Pageable pageable) {
+        Page<Order> page = status != null
+                ? orderRepository.findByStatus(status, pageable)
+                : orderRepository.findAll(pageable);
+        return PageResponse.from(page.map(this::toResponse));
+    }
+
+    /** Admin: fetch any order by id, regardless of which user placed it. */
+    public OrderResponse getOrderForAdmin(Long orderId) {
+        Order order = orderRepository.findById(orderId)
+                .orElseThrow(() -> new ResourceNotFoundException("Order not found with id: " + orderId));
+        return toResponse(order);
+    }
+
+    /** Admin: transition an order's status, e.g. CONFIRMED -> SHIPPED -> DELIVERED. */
+    @Transactional
+    public OrderResponse updateOrderStatus(Long orderId, OrderStatus newStatus) {
+        Order order = orderRepository.findById(orderId)
+                .orElseThrow(() -> new ResourceNotFoundException("Order not found with id: " + orderId));
+
+        if (order.getStatus() == OrderStatus.CANCELLED || order.getStatus() == OrderStatus.DELIVERED) {
+            throw new BadRequestException("Cannot change status of an order that is already "
+                    + order.getStatus().name().toLowerCase());
+        }
+
+        order.setStatus(newStatus);
+        return toResponse(orderRepository.save(order));
+    }
+
     private OrderResponse toResponse(Order order) {
         List<OrderItemResponse> items = order.getItems().stream()
                 .map(item -> OrderItemResponse.builder()

@@ -38,6 +38,14 @@ app:
     expiration-ms: ${JWT_EXPIRATION_MS:86400000} # 24 hours
   cors:
     allowed-origins: ${CORS_ALLOWED_ORIGINS:http://localhost:3000}
+  # Single source of truth for "what is my public URL" — drives the Swagger
+  # "server" dropdown so Try it out calls hit Render, not localhost.
+  # Locally defaults to localhost:8080. On Render, set APP_BASE_URL to your
+  # service URL, e.g. https://ecommerce-backend.onrender.com
+  base-url: ${APP_BASE_URL:http://localhost:8080}
+  # When true, Swagger publishes the seeded demo admin/user credentials in its
+  # description. Set DEMO_MODE=false in Render if this stops being a public demo.
+  demo-mode: ${DEMO_MODE:true}
 
 springdoc:
   swagger-ui:

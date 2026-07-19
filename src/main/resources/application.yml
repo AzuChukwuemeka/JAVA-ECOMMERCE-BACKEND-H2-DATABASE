@@ -52,6 +52,7 @@ springdoc:
     path: /swagger-ui.html
     operationsSorter: method
     tagsSorter: alpha
+    disable-swagger-default-values: true   # <-- added
   api-docs:
     path: /v3/api-docs
 

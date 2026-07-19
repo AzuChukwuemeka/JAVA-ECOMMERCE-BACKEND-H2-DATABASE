@@ -26,6 +26,7 @@ public class ProductService {
     private final ProductRepository productRepository;
     private final CategoryService categoryService;
 
+    @Transactional(readOnly = true)
     public PageResponse<ProductResponse> getProducts(String categorySlug, String search, Pageable pageable) {
         Page<Product> page;
         boolean hasCategory = StringUtils.hasText(categorySlug);
@@ -44,9 +45,11 @@ public class ProductService {
         return PageResponse.from(page.map(this::toResponse));
     }
 
+    @Transactional(readOnly = true)
     public ProductResponse getProductById(Long id) {
         return toResponse(findProductOrThrow(id));
     }
+        
 
     @Transactional
     public ProductResponse createProduct(ProductRequest request) {

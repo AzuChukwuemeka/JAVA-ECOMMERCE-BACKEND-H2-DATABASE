@@ -30,7 +30,7 @@ public class ProductController {
             @RequestParam(required = false) String category,
             @Parameter(description = "Case-insensitive search within product titles")
             @RequestParam(required = false) String search,
-            @PageableDefault(size = 20) Pageable pageable) {
+            @PageableDefault(size = 20, sort = "id") Pageable pageable) {
         return ResponseEntity.ok(productService.getProducts(category, search, pageable));
     }
 

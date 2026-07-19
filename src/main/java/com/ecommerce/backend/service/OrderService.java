@@ -81,11 +81,13 @@ public class OrderService {
         return toResponse(saved);
     }
 
+    @Transactional(readOnly = true)
     public PageResponse<OrderResponse> getOrdersForUser(Long userId, Pageable pageable) {
         Page<Order> page = orderRepository.findByUser_Id(userId, pageable);
         return PageResponse.from(page.map(this::toResponse));
     }
 
+    @Transactional(readOnly = true)
     public OrderResponse getOrderForUser(Long userId, Long orderId) {
         Order order = orderRepository.findByIdAndUser_Id(orderId, userId)
                 .orElseThrow(() -> new ResourceNotFoundException("Order not found with id: " + orderId));
@@ -93,6 +95,7 @@ public class OrderService {
     }
 
     /** Admin: list every order in the system, optionally filtered by status. */
+    @Transactional(readOnly = true)
     public PageResponse<OrderResponse> getAllOrders(OrderStatus status, Pageable pageable) {
         Page<Order> page = status != null
                 ? orderRepository.findByStatus(status, pageable)
@@ -101,6 +104,7 @@ public class OrderService {
     }
 
     /** Admin: fetch any order by id, regardless of which user placed it. */
+    @Transactional(readOnly = true)
     public OrderResponse getOrderForAdmin(Long orderId) {
         Order order = orderRepository.findById(orderId)
                 .orElseThrow(() -> new ResourceNotFoundException("Order not found with id: " + orderId));

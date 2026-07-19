@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -49,7 +50,6 @@ public class ProductService {
     public ProductResponse getProductById(Long id) {
         return toResponse(findProductOrThrow(id));
     }
-        
 
     @Transactional
     public ProductResponse createProduct(ProductRequest request) {
@@ -116,7 +116,7 @@ public class ProductService {
                 .brand(product.getBrand())
                 .thumbnail(product.getThumbnail())
                 .category(product.getCategory().getSlug())
-                .images(product.getImages())
+                .images(new ArrayList<>(product.getImages()))
                 .build();
     }
 }
